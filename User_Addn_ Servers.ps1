@@ -7,7 +7,7 @@ $servers = Get-Content $inputpath
 #Writting headers to out file
 "Name`tStatus" | Out-File -FilePath $outputpath
 
-#Iterating over servers
+#Iterating over servers stored in $servers array
 foreach ($server in $servers){
  try{
   $adminGroup = [ADSI]"WinNT://$server/Administrators"
@@ -15,6 +15,7 @@ foreach ($server in $servers){
   "$server`tSuccess"
   "$server`tSuccess" | Out-File -FilePath $outputpath -Append
  }
+ #if theres any error during try block, it append to the status file
  catch{
   "$server`t" + $_.Exception.Message.ToString().Split(":")[1].Replace("`n","")
   "$server`t" + $_.Exception.Message.ToString().Split(":")[1].Replace("`n","") | Out-File -FilePath $outputpath -Append
